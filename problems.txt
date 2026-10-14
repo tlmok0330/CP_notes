@@ -1,0 +1,135 @@
+/*
+https://codeforces.com/edu/course/2/lesson/6/2/practice/contest/283932/problem/B - floating point bs
+**WTF binary serach so cringe**
+
+https://codeforces.com/edu/course/2/lesson/4/2/practice/contest/273278/problem/C
+**WTF segment tree so cringe**
+
+https://codeforces.com/contest/1872/problem/F
+**DFS cycle**
+
+https://codeforces.com/contest/2143/problem/D2
+**BIT + dp**
+
+https://codeforces.com/contest/2191/problem/D2
+**define dp states creatively+strong observation** 
+
+https://codeforces.com/contest/2196/problem/B
+**crazy sqrt optimization, euneumeration trick (back and forth)**
+
+https://codeforces.com/problemset/problem/2195/F
+**clever dp construct, finding longest path containing node i on DAG**
+**dpl: max length from start to l. dpr: max length from r to end. max of dpl+dpr-1**
+
+https://qoj.ac/contest/2645/problem/15314  (problem A - 25/26 ICPC shanghai)
+**skewed binary search (discard 1/3 on right) , as many 00000s then few 11s ; confident that l=m2 (jump 66%)**
+**intended : find depth + find centroids del n/3 points everytime // randomized + find d that splits ard half**
+
+https://leetcode.com/problems/count-good-integers-on-a-grid-path/
+**Digit DP: aware 1. >> x is divided by 2 not 10 ; 2. extract digit need / then %10**
+
+https://leetcode.com/submissions/detail/1986368236/
+**crazy vector to list optimization ; intended : xor staring point and ending point?**
+
+https://oj.wyk.edu.hk/task/C2644
+**sieve like trick to retrieve every factors in log(n) + sum-of-factors function, using prime fact [multiplication of: (P[i]^(k+1) - 1) / (P[i] - 1)]**
+**intended: sieve like approach to pre-calculate sum**
+**ADAM_XU: linear sieve + sum-of-factors**
+
+https://codeforces.com/contest/2232/problem/C2
+**ternary search, special handle  f(m1) is equal to f(m2)**
+**intended: binary search to find first f(x)>=f(x+1), since if f(i+1)<f(i+2), f(i)<f(i+1) [increases -> strictly decrease]**
+**intended: smart greedy, maintaning l, r, ans ; min opened seats, max opened seats, max ans**
+
+https://codeforces.com/contest/2234/problem/F
+**brain + monotonic stack dp**
+**should rethink again the logic for self improvements**
+--AI assisted
+
+https://codeforces.com/problemset/problem/2233/D
+**bruteforce + implmentation, shouldnt assume correctness, map the thoughts**
+--AI assisted
+
+https://codeforces.com/problemset/problem/2234/E 
+**divide & conquer, optimization to log n, O(n) follow up?**
+
+https://codeforces.com/contest/2240/problem/B - 28.6.2026
+**solving system of equations -> fixed (n-r+1)(m-c+1) ans, if others filled ; where to get intuitive ideas? ; focus on parity concept**
+--AI assisted
+
+https://codeforces.com/contest/2240/problem/C - 28.6.2026
+**learn some XOR sum, impartial game theorey, Sprague–Grundy theorem**
+**idea: any move that doesn't leave 0 or 1 +ve elements allows Bob to use this exact same execution strategy on Alice**
+--AI assisted
+
+https://codeforces.com/contest/2240/problem/D - 28.6.2026
+**prove direct greedy, math mindset**
+--AI assisted
+
+https://leetcode.com/problems/count-distinct-ways-to-form-target-from-two-strings/
+**Inclusion Exclusion Handling for DP**
+
+https://leetcode.com/problems/palindromic-subarray-sum/
+**Manacher's Algorithm for palindrome**
+--Template ;; futher readings : string hashing
+
+https://codeforces.com/problemset/problem/2246/C
+**combinortorics: find simple formula ; have crucial observation ; tackle case with synthesized findings**
+--Hints assisted
+
+https://codeforces.com/contest/2245/problem/D2
+**2-SAT / Topological Sort Trick / SCC / insane math trick (ranks) / greedy trick** 
+Construct the Implication Graph:            For every clause in the form \((A \lor B)\), rewrite it as two implications: \((\neg A \implies B)\) and \((\neg B \implies A)\). Create a directed edge for each implication.
+Find Strongly Connected Components (SCCs):  Use an algorithm like Tarjan's or Kosaraju's to find all strongly connected components in linear time.
+Check Satisfiability:                       A 2-SAT formula is unsatisfiable if and only if any variable x and its negation \(\neg x\) belong to the same SCC.
+Assign Values:                              If no such contradiction exists, a valid truth assignment can be found by evaluating the topological order of the SCCs.
+
+https://atcoder.jp/contests/arc225/tasks/arc225_d
+**ATCODER: what the conclusion-based ; think of some math observaions after stuck with bare eyes? not even understanding math-based**
+
+https://qoj.ac/contest/4071/problem/20016  (problem A - 26/27 ICPC online 1)
+**for (auto : ) range-based for loop -> creates copy, better pass by reference**
+
+https://qoj.ac/contest/4071/problem/20027 (problem L - 26/27 ICPC online 1)
+**Trie + deep understanding**
+
+https://qoj.ac/problem/20246 (problem K - 26/27 ICPC online 2)
+**discretize tricks?**
+**constant optimization: unordered_map (tiny datasets slow) e.g use Iterator avoid double log**
+**bitset optimizations (/64): two-bitset representation: B1: 1 if cnt >= 1 ; B2: 1 if cnt >= 2**
+
+https://codeforces.com/contest/2223/problem/B  24.9.2026
+**UNSOLVED: failed to use pbds, 1600 rated**
+
+https://oj.wyk.edu.hk/task/T265 26.9.2026
+**great problem solving: differenciation find max pts, algo wise store variable**
+
+https://oj.wyk.edu.hk/task/T264 26.9.2026
+**great constructive: thinking in a^2-b^2+c^2... -> turns out to be graphical imagination && edge cases handling**
+
+https://oj.wyk.edu.hk/task/T266 26.9.2026
+**crazy constructive, thought long time: Min Vertex Cover // Greedy delay as long as possible to fill nodes**
+
+https://www.luogu.com.cn/problem/P1494 - 06.10.2026
+**Mo's Algotithm: offline processing, off by 1 errors, 4 while loop order matters**
+
+https://qoj.ac/contest/2908/problem/15320 (problem G - 25/26 ICPC shanghai) - 07.10.2026
+**linear basis with mask trick, case by case**
+**trick: stop trying to look at the numbers, and start looking at what happens to a single bit position**
+
+https://qoj.ac/contest/2908/problem/15323 (problem J - 25/26 ICPC shanghai) 
+**trie: lexicographical order, small char sets -> think of trie? [at least i tired struct Trie : bfs vs dfs destructor]**
+**graph traversal: modified dfs** **LCRS opitimization one step at a time** **math vector size capping optimization**
+
+https://oj.wyk.edu.hk/task/W262E - 13.10.2026
+**interesting XOR: offline + bounded O(n) queries observation**
+**1. Mo's algorithm (better use set{missing}); 2. MEX segtree (Ts Te on val domain) ; 3. prefix max update**  
+
+https://qoj.ac/contest/1784/problem/9249 (problem H - 23/24 ICPC xian) 14.10.2026
+**Model: Merge Sort Tree || Mo's Algo + BIT / Freq Arr**
+**think: sparse table like: small to large queries ;; implementation details, init etc**
+
+https://codeforces.com/contest/2276/problem/E - 15.10.2026
+**subsequence, counting, tricks: nxt occurence arr** **easier way to count: big - small**
+**difference array on difference array ; off by 1 error**
+*/

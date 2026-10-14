@@ -1,0 +1,990 @@
+/*
+ICPC:
+- Penalty diff. from CF
+- pbds, fhq, treap
+- OUTPUT FORMAT!!
+- chmod +x ./a.out ???
+
+LEETCODE:
+- fav list wiih many hard problems and tricks
+
+GENERAL:
+- 0 - 1 indexing ; off by 1 error
+- total number of subsequences of an array of size 'n' is 2^n
+- 1e18-1 != (1LL<<18)-1 ;; LLONG_MAX , INT_MAX
+- 1e18 still fine -> 1e25 precision error
+- save occurrences -> cnt array -> set 
+- getline, cin have diff -> \r and \n
+- (int)s.size() - 1
+- before checking v.back() ; v.front() ensure !v.empty()
+- dense / sparse graph
+- for(int i=1; i<=n; i++) for(int j=i; j<=n; j+=i) dp... //exhaust divisors, O(nlog(n))
+- output : loop-size = 0 -> have 2 "\n" in stdout?
+- multiset : ms.count(x) ; time_complexity O(logn + k), where k is no. of occurence of number x!!
+- MEX : O(n) seen bool array, global frequency array for suffix (leetcode upsolve)
+- Ternary Search : strictly unimodal (no plateaus) || Binary Search on the Derivative (derivative of unimodal is monotonic) - cf upsolve 2232
+- number of primes <= 10⁶ : 78,498 ;; number of primes <= x: π(x) ≈ x / ln x ;; P(x is prime) ≈ 1 / ln x
+- wipe out memory if multi test cases!!
+- discretization !!!!!!!!!!!!!
+
+BUG
+- update(0, 1, n, v[la], la++) --> CAUSES BUG
+
+GREEDY:
+- always look for flaws in sorting logic
+
+BITMASK:
+- XOR: 2n ^ (2n+1) -> 1
+- XOR: XOR two different numbers can never be 0
+- XOR Basis: 1.Lineraly dependent 2.Unique MSB ; = Gaussian elimination on binary numbers: basis[i] is the pivot for bit i, and x ^= basis[i] eliminates that bit.
+- XOR Basis: To find the k-th smallest non-distinct (multi) XOR sum, you would typically divide k by 2^{N-d} (rounding up) ; Frequency of all subset XOR appears to be blocks
+- least significant set bit: a & (-a)
+
+- sub-mask: for(int s=a; s>0; s=(s-1) & a) ... (1. 0 excluded to prevent infinite loop) (2. time O(3^n) for all masks and their submasks)
+- x &= (x - 1) clears the lowest set bit
+- c++20: std::countr_zero(u) : count trailing zeros from lowest significant bit ; works for unsigned only ; Lowest Set Bit =/= Significant Bit
+
+BACKTRACK PATH:
+- opt array may store path leading to dead end (careful!)
+- max(min(...)) ; max(avg(...))
+
+BINARY SEARCH:
+- sorted / monotone
+- correct bounds
+- grade function datatype overflow (dun always bound 1e18)
+- max comparisons: ceil(log2(n + 1))
+
+BINARY EXPONENTIATION:
+- (a&b)&c = a&(b&c)
+- while(b) {if(b&1) {} b>>= 1;}
+
+GRAPH - TREE:
+- Center : 1 or 2 ; Find the Tree Diameter, and it is the node(s) at exactly Diameter / 2
+- Centroid : 1 or 2 ; A single Top-Down DP counting subtree sizes / two-DFS 
+
+GRAPH THEORY
+- SCC, bridge, Articulation Point
+- BCC ？？
+- BIPARTITE
+- TSP, go every vertex exactly once -> return to start -> NP-hard 
+    - naive: dp[mask ∪ {v}][v] = min(dp[mask ∪ {v}][v], dp[mask][u] + weight(u, v))
+    - 1. Hamiltonian Path (no need return to start)
+    - 2. Steiner Tree / Partial TSP (k relavant vertices) : APSP on k vertices + bitmask dp
+    - 3. Repeated Visits Allowed : weight(u, v) => dist[u][v]
+    - Heuristic: 2-Opt / 3-Opt (邊交換法)?
+- T-join : Let G = (V, E) be a (undirected) graph and T ⊆ V where |T| is even. A T-join is an edge set J where deg_J(v) is odd ⇔ v ∈ in T
+    - Handshaking lemma: Every undirected graph has an even number of odd-degree vertices
+    - solves CPP, go every edges at least once -> return to office
+    - Min T-join cost = Min cost of pairing all vertices in T
+    - Min Cost Max Flow in directed graph?
+
+SEGMENT TREE:
+- (a&b)&c = a&(b&c)
+- 4*n memory
+- init tree?
+- lazy tag update? (+=, =); merge?
+- return 1e18 when out of bound -> int outbound?
+- if(Ts==Te) {segt[cn]=y; return;}  
+  if(Ts>x || Te<x) return;  
+  --> hv BUG, order
+
+LINEAR ALGEBRA: 
+- RREF: first non-zero number in any row (called the leading entry or pivot) MUST be a 1
+- Matrix Faxt Expo: applies on square matrix ;; or ;; Final State (K × 1) = [Transition Matrix (K × K)]ⁿ × Initial State (K × 1)]
+
+RECURSION/DFS:
+- gonna exit(0) when output ans(perhaps)
+
+MEMORIZATION DP:
+- mem array initialize to impossible case
+
+MEET IN THE MIDDLE:
+- 2^(N) -> 2^(N/2); (go dfs)
+
+STRING:
+- Z-function: the length of the longest string that is, at the same time, a prefix of $s$ and a prefix of the suffix of $s$ starting at $i$.
+- Longest Prefix Suffix: can overlap, not entire string 
+- KMP trick: the length of the shortest repeating period of a string of length $N$ is simply $N - pi[N-1]$ <--> if (N % (N - pi[N-1]) == 0 && pi[N-1] > 0) else whole string (0-based pi array)
+    - the hard part: KMP -> does the pattern repeat every p positions? where p = N - pi[N-1] ; N - pi[N-1] = how far I need to shift the string to make its maximum overlap match.
+    - the % checks ensure chunks perfectly
+- constant optimization: Bitmap SA / Bitmap Trie 
+
+MODULAR INVERSE:
+- x * a = b (mod M) [a, M coprime]
+- find nCr % M
+- ** a ^ -1 = a ^ (M-2), where M is the MOD (1e9+7)
+- Using Fermat (a^(M-2)) **a, M coprime + M is prime** ;; Using Ex-GCD **a, M coprime** 
+
+NUMBER THEOREY:
+1. Adding an element to a set can only decrease or maintain the GCD.
+2.  GCD is the product of all primes that are present in every number, raised to their minimum exponent
+3. "At Most 6 Critical Elements" theorem (Ramsey Theory, combinatorics) (for N <= 5e4); "Critical" means if dropping an element increase the GCD.
+
+COMBINATORICS:
+- catalan number:
+C_n = 1/(n+1) * C{2n}{n} 
+C_n = C{2n}{n} - C{2n}{n-1}
+C_(n+1) = sum{i=0}-{n} C_i * C_(n-i), starting with C_0 = 1
+
+Ex-GCD: O(log(min(a, b)){
+int exgcd(int a, int b, int& x, int& y){
+  if(b==0){
+    x=1; y=0;
+    return a;
+  }
+  int x1, y1;
+  int d=exgcd(b, a%b, x1, y1);
+  x=y1;
+  y=x1-y1*(a/b);
+  return d;
+}
+}
+
+Modular Inverse: O(n)
+{
+  inv[1] = 1;
+  for (int i=2; i<20; ++i) {
+    inv[i] = (MOD-((MOD/i)*inv[MOD%i])%MOD)%MOD;
+  }
+  // if factorial inverse
+  for (int i=2; i<20; ++i) {
+    inv[i] *= inv[i-1];
+    inv[i] %= MOD;
+  }
+}
+
+nCr % MOD (using Fermat's little theorem): O(1)
+{
+    if(r<0 || r>n)
+      return 0;
+    if(r==0 || r==n)
+      return 1;
+    return (fac[n] * inv[r] % MOD * inv[n-r] % MOD) % MOD;
+}
+
+Matrix Fast Power : O(k^3 * log n)
+{
+const int MAT = 103;
+struct M {
+  int t[MAT][MAT];
+  int n;
+  M(int n) {
+    this->n = n;
+    memset(t, 0, sizeof(t));
+  }
+  M operator* (const M& a) const {
+    M c = M(n);
+    signed long long mo2 = (int)4 * MOD * MOD;
+    for (int i = 0; i < n; i++) {
+      for (int j = 0; j < n; j++ ) {
+        for (int k = 0; k < n; k++) {
+          c.t[i][k] += t[i][j] * a.t[j][k];
+          if (c.t[i][k] > mo2) c.t[i][k] -= mo2;
+        }
+      }
+    }
+    for (int i = 0; i < n; i++) for (int j = 0; j < n; j++) c.t[i][j] %= MOD;
+    return c;
+  }
+};
+M fastPow(int n, M base, int power) {
+  M ret = M(n);
+  for (int i = 0; i < n; i++) ret.t[i][i] = 1;
+  while (power > 0) {
+    if (power & 1) {
+      ret = ret * base;
+    }
+    base = base * base;
+    power >>= 1;
+  }
+  return ret;
+}
+}
+
+DP Subset Sum (normal): O(n*mx)
+{
+  dp[0]=1;
+  for(int i=0; i<n; i++){
+    for(int tar=mx; tar>=v[i]; tar--){
+      if(dp[tar-v[i]] && !dp[tar]){
+        dp[tar]=1; 
+      }
+    }
+  }
+}
+
+DP Subset Sum (unlimited supply of v[i]): O(n*mx)
+{
+  dp[0]=1;
+  for(int i=0; i<n; i++){
+    for(int tar=v[i]; tar<=mx; tar++){
+      if(dp[tar-v[i]] && !dp[tar]){
+        dp[tar]=1; fs++;
+      }
+    }
+  }
+}
+
+LIS: O(n*log(n))
+{
+  int lb(vector<int> &v, int val){
+    int n=v.size();
+    int l=-1, r=n;
+      while(l+1<r){
+        int mid=(l+r)>>1;
+        if(v[mid]>=val) r=mid;
+        else l=mid;
+    }
+    return r;
+  }
+  vector<int> tails, tails_idx;
+  vector<int> pre(n, -1);
+  tails.push_back(nums[0]);
+  tails_idx.push_back(0);
+  for(int i=1; i<n; i++){
+    int k=lb(tails, nums[i]);
+    if(k==tails.size()){
+        tails.push_back(nums[i]);
+        tails_idx.push_back(i);
+    }
+    else{
+      tails[k]=nums[i];
+      tails_idx[k]=i;
+    }
+    pre[i]=(k-1<0? -1: tails_idx[k-1]);
+  }
+  vector<int> LIS;
+  int ans=tails.size();
+  int id=tails_idx[ans-1];
+  for(int i=0; i<ans; i++){
+    LIS.pb(nums[id]);
+    id=pre[id];
+  }
+  reverse(LIS.begin(), LIS.end());
+  //for(auto u: LIS) cout << u << " "; cout << "\n";
+}
+
+DP Longest Common Subsequence: O(|s|*|t|)
+{
+  s.insert(0, "!"); t.insert(0, "@");
+  for(int i=1; i<=n1; i++)
+    for(int j=1; j<=n2; j++)
+      dp[i][j]=1e18;
+  for(int i=1; i<=n1; i++) dp[i][0]=0;
+  for(int j=1; j<=n2; j++) dp[0][j]=0;
+  
+  for(int i=1; i<=n1; i++){
+    for(int j=1; j<=n2; j++){
+      dp[i][j]=max(dp[i-1][j], dp[i][j-1]);
+      if(s[i]==t[j]){
+        dp[i][j]=max(dp[i][j], dp[i-1][j-1]+1);
+      }
+    }
+  }
+}
+
+DP Knapsack1: O(n*w)
+{
+  v={values, weight}, dp{0};
+  for(int i=1; i<=n; i++){
+    for(int j=0; j<=w; j++){
+      dp[i][j]=dp[i-1][j];
+      if(j-v[i][1]>=0){
+        dp[i][j]=max(dp[i][j], dp[i-1][j-v[i][1]]+v[i][0]);
+      }
+    }
+  }
+  int mx=0;
+  for(int j=0; j<=w; j++){
+    mx=max(mx, dp[n][j]);
+  }
+  cout << mx << "\n";
+}
+
+DP Knapsack2: O(n*sumofvalues)
+{
+  v={values, weight}, dp{1e18};
+  for(int i=1; i<=n; i++){
+    for(int j=0; j<=100000; j++){
+      dp[i][j]=dp[i-1][j];
+      if(j==v[i][0]){
+        dp[i][j]=min(dp[i][j], v[i][1]);
+      }
+      else if(j>v[i][0])
+        dp[i][j]=min(dp[i][j], dp[i-1][j-v[i][0]]+v[i][1]);
+    }
+  }
+  for(int j=100000; j>=0; j--){
+    if(dp[n][j]<=w) {
+      cout << j << "\n";
+      return;
+    }
+  }
+}
+
+DAG-Indegree: O(n)
+{
+  vector<int> in(n+1); vector<bool> del(n+1); vector<int> de;
+  queue <int> Q;
+  for (int i=1; i<=n; ++i) {
+    for (auto v : edge[i]) {
+      ++in[v];
+    }
+  }
+  for (int i=1; i<=n; ++i) if (!in[i]) Q.push(i);
+  while (!Q.empty()) {
+    auto u = Q.front();
+    de.push_back(u);
+    Q.pop();
+    del[u] = 1;
+    for (auto v : edge[u]) {
+      --in[v];
+      if (!in[v]) {
+        Q.push(v);
+      }
+    }
+  }
+}
+
+MST KRUSKAL: O(E*logE)
+{
+  vector<vector<int> > se(103);
+  vector<int> P(103), sz(103);
+  //DSU
+  int Find(int u){
+    return (P[u]==u? u: P[u]=Find(P[u]));
+  }
+  void Union(int u, int v){
+    int fu=Find(u), fv=Find(v);
+    if(fu==fv) return;
+    if(sz[fu]>sz[fv]) swap(fu, fv); //size of Find(u) is smaller
+    sz[fv]+=sz[fu];
+    
+    se[fv].reserve(sz[fv] + sz[fu]);
+    se[fv].insert(se[fv].end(), se[fu].begin(), se[fu].end());
+    vector<int>().swap(se[fu]);   // Swaps with a temporary empty vector, freeing memory OR use list<int>
+    
+    P[fu]=fv;
+    return;
+  }
+  
+  int ans=0, co=0;
+  for(int i=1; i<=n; i++) P[i]=i;
+  sort(edge.begin(), edge.end());
+  for(auto [we, fr, to]: edge){
+    if(Find(fr)!=Find(to)){
+      Union(fr, to);
+      ans+=we;
+      co++;
+    }
+  }
+}
+
+KMP: O(n)
+{
+  int n=a.size(); int m=b.size();
+  string s=b+"#"+a;
+  vector<int> pi(n+m+2);
+  int cnt=0;
+  for(int i=1; i<n+m+1; i++){
+    int len=pi[i-1];
+    while(len!=0 && s[i]!=s[len]){
+      len=pi[len-1];
+    }
+    if(s[i]==s[len]){
+      pi[i]=len+1;
+      if(pi[i]==m) cnt++;
+    }
+  }
+  cout << cnt << "\n";
+}
+
+BIT: O(log(n)) 
+FULLY: "+" , "*", "^"
+PARTIAL: "MAX", "MIN", "|", "&"
+{
+  ///must 1-based index
+
+  int BIT[1000001];
+  int n;
+  void add(int id, int val){
+    while(id<=n){     ///n? n+1?
+      BIT[id]+=val;   ///must +=
+      id+=id&-id;
+    }
+    return;
+  }
+  int sum(int id){
+    int res=0;
+    while(id>0){
+      res+=BIT[id];
+      id-=id&-id;
+    }
+    return res;
+  }
+}
+
+XOR Basis: O(D) -- REF vs RREF style (RREF for kth XOR)
+USES: max/min XOR over subsets, with query x, obtainability
+Given any set of \(N\) numbers, the total number of distinct XOR combinations you can possibly form (including 0, which is the empty subset)
+must be exactly a power of 2, specifically \(2^{r}\), where \(r\) is the size (rank) of the XOR basis
+{
+int basis[32]; 
+void add_vector(int x) {
+    for (int i = 31; i >= 0; i--) {
+        if ((x >> i) & 1) { // If the i-th bit is set
+            if (!basis[i]) { 
+                basis[i] = x; // Found a slot!
+                return;
+            }
+            x ^= basis[i]; // Reduce x and keep looking
+        }
+    }
+
+    /// ++++
+    for (int i = 0; i <= 31; i++) {
+        if (!basis[i]) continue;
+    
+        for (int j = i + 1; j <= 31; j++) {
+            if (basis[j] && ((basis[j] >> i) & 1))
+                basis[j] ^= basis[i];
+    }
+    /// ++++
+}
+ver 2 : 
+struct XorBasis {
+    static constexpr int B = 60;
+    long long b[B] = {};
+    int rank = 0, total = 0;
+
+    bool insert(long long x) {
+        total++;
+        for (int i = B - 1; i >= 0; i--) {
+            if (!(x >> i & 1)) continue;
+            if (!b[i]) { b[i] = x; rank++; return true; }
+            x ^= b[i];
+        }
+        return false;
+    }
+    bool can_make(long long x) const {
+        for (int i = B - 1; i >= 0; i--)
+            if (x >> i & 1) { if (!b[i]) return false; x ^= b[i]; }
+        return true;
+    }
+    long long max_xor(long long x = 0) const {
+        for (int i = B - 1; i >= 0; i--) x = max(x, x ^ b[i]);
+        return x;
+    }
+    // k-th smallest distinct value among all subset XORs, 0-indexed, empty subset (value 0) included.
+    // Returns -1 if k >= 2^rank.
+    long long kth(long long k) {
+        for (int i = 0; i < B; i++) if (b[i])
+            for (int j = i + 1; j < B; j++)
+                if (b[j] >> i & 1) b[j] ^= b[i];
+        vector<long long> v;
+        for (int i = 0; i < B; i++) if (b[i]) v.push_back(b[i]);
+        if (k >= (1LL << v.size())) return -1;
+        long long res = 0;
+        for (int i = 0; i < (int)v.size(); i++) if (k >> i & 1) res ^= v[i];
+        return res;
+    }
+};
+
+
+
+}
+
+Euler Tour: Subtree Query:
+{
+vector<int> euler;
+vector<int> st(100004), en(100004);
+int timer=0;
+int segt[400004];
+
+void dfs(int cn, int pa, vector<vector<int> > &adj){
+  st[cn]=timer++;
+  euler.push_back(cn);
+  for(auto u: adj[cn]){
+    if(u!=pa) dfs(u, cn, adj);
+  }
+  en[cn]=timer;
+  return;
+}
+}
+
+
+HLD + Segment Tree:
+{
+int dfs_size(int u, int p, int d) {
+    int size = 1;
+    int max_child_size = 0;
+    parent[u] = p;
+    depth[u] = d;
+    heavy[u] = -1; // Default to no heavy child (leaves)
+
+    for (int v : adj[u]) {
+        if (v != p) {
+            int child_size = dfs_size(v, u, d + 1);
+            size += child_size;
+            if (child_size > max_child_size) {
+                max_child_size = child_size;
+                heavy[u] = v; // Track child with max size
+            }
+        }
+    }
+    return size;
+}
+
+int cur_pos = 0;
+void dfs_hld(int u, int h) {
+    head[u] = h;
+    pos[u] = ++cur_pos;
+    // Map position back to initial node value for segment tree construction
+    arr_flat[cur_pos] = val[u]; 
+
+    // 1. Process the heavy child first to keep its sequence contiguous
+    if (heavy[u] != -1) {
+        dfs_hld(heavy[u], h); 
+    }
+
+    // 2. Process light children (each starts its own heavy path)
+    for (int v : adj[u]) {
+        if (v != parent[u] && v != heavy[u]) {
+            dfs_hld(v, v); // The head of this new path is the child itself
+        }
+    }
+}
+
+int query_path(int a, int b) {
+    int res = 0; // Assuming a sum query
+    while (head[a] != head[b]) {
+        // Move the node whose path head is deeper
+        if (depth[head[a]] > depth[head[b]]) {
+            swap(a, b);
+        }
+        // Query the range from the head of b's path up to b itself
+        res += segment_tree_query(pos[head[b]], pos[b]);
+        // Jump above the current heavy path
+        b = parent[head[b]];
+    }
+    // Now both nodes are on the identical heavy path
+    if (depth[a] > depth[b]) {
+        swap(a, b);
+    }
+    // Final query on the remaining segment between them
+    res += segment_tree_query(pos[a], pos[b]);
+    return res;
+}
+
+}
+
+ConvexHull: 
+{
+struct pt {
+    double x, y;
+    bool operator == (pt const& t) const {
+        return x == t.x && y == t.y;
+    }
+    pt operator-(const pt& rhs) const {
+        return {x - rhs.x, y - rhs.y};
+    }
+    // Cross product
+    double operator*(const pt& rhs) const {
+        return x * rhs.y - y * rhs.x;
+    }
+};
+
+int orientation(pt a, pt b, pt c) {
+    double v = a.x*(b.y-c.y)+b.x*(c.y-a.y)+c.x*(a.y-b.y);
+    if (v < 0) return -1; // clockwise
+    if (v > 0) return +1; // counter-clockwise
+    return 0;
+}
+
+bool cw(pt a, pt b, pt c, bool include_collinear) {
+    int o = orientation(a, b, c);
+    return o < 0 || (include_collinear && o == 0);
+}
+bool collinear(pt a, pt b, pt c) { return orientation(a, b, c) == 0; }
+
+int dist2(const pt &a, const pt &b) {
+    int dx = a.x - b.x, dy = a.y - b.y;
+    return dx*dx + dy*dy;
+}
+
+// Helper: copy array and sort as needed
+void convex_hull(pt a[], int n, pt out[], int &m, bool include_collinear = false) {
+    // Find lowest point
+    int p0 = 0;
+    for (int i = 1; i < n; ++i)
+        if (a[i].y < a[p0].y || (a[i].y == a[p0].y && a[i].x < a[p0].x)) p0 = i;
+    std::swap(a[0], a[p0]);
+
+    // Sort rest by polar angle
+    std::sort(a+1, a+n, [&](const pt &p, const pt &q) {
+        int o = orientation(a[0], p, q);
+        if (o == 0)
+            return (dist2(a[0], p) < dist2(a[0], q)); // You might want your own dist2 function
+            // FRAGILE? int vs double
+        return o == 1;
+    });
+
+    // Graham scan
+    int k = 0;
+    for (int i = 0; i < n; ++i) {
+        while (k >= 2 && orientation(out[k-2], out[k-1], a[i]) < (include_collinear ? 0 : 1))
+            --k;
+        out[k++] = a[i];
+    }
+
+    // Remove final duplicate if collinear not allowed
+    if (!include_collinear && k >= 2 && out[0] == out[k-1]) --k;
+    m = k;
+}
+
+
+int r; int id = 0;
+
+array<double, 3> getabc(pt x, pt y){
+    double x1 = x.x, y1 = x.y, x2 = y.x, y2 = y.y;
+    if(x1==x2) {
+        return {1, 0, -x1};
+    }
+    double m = (y2-y1) / (x2-x1);
+    return {-m, 1, -y1+m*x1};
+}
+
+int pointLocation(pt p, pt hull[], int n) {
+    bool onBoundary = false;
+    // int n=hull.size()-1;
+    for(int i = 0; i < n; i++) {
+        pt a = hull[i];
+        pt b = hull[(i + 1) % n];
+        
+        double cross = (b - a) * (p - a);
+        
+        // Check if point is on the line segment
+        if(abs(cross) < 1e-9) {
+            // Check if point is between a and b
+            if(min(a.x, b.x) <= p.x && p.x <= max(a.x, b.x) &&
+               min(a.y, b.y) <= p.y && p.y <= max(a.y, b.y)) {
+                onBoundary = true;
+            }
+        }
+        
+        // If cross product is negative, point is on wrong side
+        if(cross < -1e-9) return -1; // Outside
+    }
+    
+    return onBoundary ? 0 : 1; // On boundary or inside
+}
+ver 2 : convex hull:
+struct Pt {
+    long long x, y;
+    bool operator<(const Pt& o) const { return x < o.x || (x == o.x && y < o.y); }
+    bool operator==(const Pt& o) const { return x == o.x && y == o.y; }
+};
+long long cross(const Pt& o, const Pt& a, const Pt& b) {
+    return (a.x - o.x) * (b.y - o.y) - (a.y - o.y) * (b.x - o.x);
+}
+// Counter-clockwise hull, collinear points removed. For coordinates up to 1e9 use __int128 in cross.
+vector<Pt> convex_hull(vector<Pt> p) {
+    sort(p.begin(), p.end());
+    p.erase(unique(p.begin(), p.end()), p.end());
+    int n = p.size();
+    if (n <= 2) return p;
+    vector<Pt> h(2 * n);
+    int k = 0;
+    for (int i = 0; i < n; i++) {
+        while (k >= 2 && cross(h[k - 2], h[k - 1], p[i]) <= 0) k--;
+        h[k++] = p[i];
+    }
+    for (int i = n - 2, lo = k + 1; i >= 0; i--) {
+        while (k >= lo && cross(h[k - 2], h[k - 1], p[i]) <= 0) k--;
+        h[k++] = p[i];
+    }
+    h.resize(k - 1);
+    return h;
+}
+
+
+struct MergeSortTree {
+  int n;
+  vector<vector<int>> tree;  
+
+  MergeSortTree(const vector<int> &a) {
+    n = (int)a.size();
+    tree.assign(4 * n, {});
+    build(1, 0, n - 1, a);
+  }
+
+  void build(int node, int l, int r, const vector<int> &a) {
+    if (l == r) {
+      tree[node] = {a[l]};
+      return;
+    }
+    int mid = (l + r) >> 1;
+    build(node << 1, l, mid, a);
+    build(node << 1 | 1, mid + 1, r, a);
+    tree[node].resize(tree[node << 1].size() + tree[node << 1 | 1].size());
+    merge(tree[node << 1].begin(), tree[node << 1].end(),
+          tree[node << 1 | 1].begin(), tree[node << 1 | 1].end(),
+          tree[node].begin());
+  }
+
+  int query(int node, int l, int r, int ql, int qr, int k) const {
+    if (qr < l || r < ql) return 0;             // no overlap
+    if (ql <= l && r <= qr) {                   // fully inside
+      return upper_bound(tree[node].begin(), tree[node].end(), k) - tree[node].begin();
+    }
+    int mid = (l + r) >> 1;
+    return query(node << 1, l, mid, ql, qr, k) + query(node << 1 | 1, mid + 1, r, ql, qr, k);
+  }
+
+  int query(int l, int r, int k) const {
+    return query(1, 0, n - 1, l, r, k);
+  }
+};
+
+//result.reserve(v1.size() + v2.size()); // Reserves memory up front
+//std::merge(v1.begin(), v1.end(), v2.begin(), v2.end(), std::back_inserter(result));
+
+
+Hashing - vector of int -> ull - O(n)
+{ 
+static const ull SEED =
+    chrono::steady_clock::now().time_since_epoch().count();
+
+static ull splitmix64(ull x) {
+    x += 0x9e3779b97f4a7c15ULL;
+    x = (x ^ (x >> 30)) * 0xbf58476d1ce4e5b9ULL;
+    x = (x ^ (x >> 27)) * 0x94d049bb133111ebULL;
+    return x ^ (x >> 31);
+}
+
+ull compute_hash(const vector<int>& v) {
+    ull h = SEED;
+    for (int x : v)
+        h = splitmix64(h ^ splitmix64((ull)(int64_t)x));
+    return h;
+}
+}
+
+Eppstein_k_shortest_paths: O(m+k+nlogn) [paths with cycles allowed]
+{
+#include <iostream>
+#include <vector>
+#include <queue>
+#include <unordered_map>
+
+// Reuses the identical Graph definition structures from snippet 1
+
+std::vector<Path> eppstein_k_shortest_paths(const Graph& graph, Node source, Node target, int K) {
+    std::vector<Path> paths_found;
+    std::unordered_map<Node, int> visit_counts;
+
+    // Queue parameters: Path entity wrappers
+    std::priority_queue<Path, std::vector<Path>, std::greater<>> pq;
+    pq.push({0.0, {source}});
+
+    while (!pq.empty() && paths_found.size() < K) {
+        Path current = pq.top();
+        pq.pop();
+
+        Node current_node = current.nodes.back();
+        visit_counts[current_node]++;
+
+        if (current_node == target) {
+            paths_found.push_back(current);
+        }
+
+        // Branching check: Cut execution branches if a node is requested over K iterations
+        if (visit_counts[current_node] > K) {
+            continue;
+        }
+
+        if (graph.find(current_node) != graph.end()) {
+            for (const auto& edge : graph.at(current_node)) {
+                Path next_path = current;
+                next_path.nodes.push_back(edge.to);
+                next_path.cost += edge.weight;
+                pq.push(next_path);
+            }
+        }
+    }
+    return paths_found;
+}
+}
+
+T-join using bitmask DP:
+{
+const long long INF = 1e15; 
+long long solveMinWeightTJoin(const vector<vector<long long>>& dist, const vector<int>& T) {
+    int k = T.size();
+    if (k % 2 != 0) return -1; // T 的數量必須是偶數
+
+    vector<long long> dp(1 << k, INF);
+    dp[0] = 0; 
+
+    for (int mask = 0; mask < (1 << k); ++mask) {
+        if (dp[mask] == INF) continue;
+        int i = -1;
+        for (int b = 0; b < k; ++b) {
+            if (!(mask & (1 << b))) {
+                i = b;
+                break;
+            }
+        }
+        if (i == -1) continue;
+
+        for (int j = i + 1; j < k; ++j) {
+            if (!(mask & (1 << j))) {
+                int next_mask = mask | (1 << i) | (1 << j);
+                dp[next_mask] = min(dp[next_mask], dp[mask] + dist[T[i]][T[j]]);
+            }
+        }
+    }
+    return dp[(1 << k) - 1];
+}
+}
+
+MEX segtree:
+{
+int query(int cn, int Ts, int Te, int L){
+  // wow interesting segtree
+  if(Ts==Te) {
+    if(segt[cn]<L) return Ts;
+    else return Ts+1;
+  } 
+  int mid=Ts+Te>>1;
+  if(segt[2*cn+1]<L)
+    return query(2*cn+1, Ts, mid, L);
+  else 
+    return query(2*cn+2, mid+1, Te, L);
+}
+
+void update(int cn, int Ts, int Te, int x, int i){
+  if(x<Ts || x>Te) return;
+  if(Ts==Te){
+    segt[cn]=max(segt[cn], i);
+    return;
+  }
+  int mid=Ts+Te>>1;
+  update(2*cn+1, Ts, mid, x, i);
+  update(2*cn+2, mid+1, Te, x, i);
+  segt[cn]=min(segt[2*cn+1], segt[2*cn+2]);
+  return;
+}
+}
+
+PBDS USAGE
+{
+#include <ext/pb_ds/assoc_container.hpp>
+#include <ext/pb_ds/tree_policy.hpp>
+using namespace __gnu_pbds;
+template <class T>
+using ordered_set = tree<T, null_type, less<T>, rb_tree_tag, tree_order_statistics_node_update>;
+
+// ordered_set<int> s;
+// s.find_by_order(k)  -> iterator to k-th smallest (0-indexed)
+// s.order_of_key(x)   -> number of elements < x
+// multiset: store pair<value, unique_id>, e.g. {x, i}
+// order_of_key({x, -1}) counts elements with value < x
+}
+
+Two-Satisfiability template:
+- 0-indexed variables 
+  1. Clause: (x0 is True) OR (x1 is False)
+  solver.either(0, true, 1, false);
+  2. Clause: (x1 is True) OR (x2 is True)
+  solver.either(1, true, 2, true);
+  3. Force x2 to be False
+  solver.force(2, false);
+- O(N+M) 
+
+struct TwoSat {
+    
+    int n, timer = 0, ncomp = 0;
+    vector<vector<int>> g;
+    vector<int> comp, low, ord, stk;
+    vector<bool> val;
+    TwoSat(int n) : n(n), g(2 * n) {}
+    // literal id: 2*x = "x is true", 2*x+1 = "x is false"
+    // adds clause (x_a == va) OR (x_b == vb)
+    void either(int a, bool va, int b, bool vb) {
+        int A = 2 * a + !va, B = 2 * b + !vb;
+        g[A ^ 1].push_back(B);
+        g[B ^ 1].push_back(A);
+    }
+    void force(int a, bool va) { either(a, va, a, va); }
+    void dfs(int u) {
+        ord[u] = low[u] = ++timer;
+        stk.push_back(u);
+        for (int v : g[u]) {
+            if (!ord[v]) { dfs(v); low[u] = min(low[u], low[v]); }
+            else if (comp[v] < 0) low[u] = min(low[u], ord[v]);
+        }
+        if (low[u] == ord[u]) {
+            while (true) {
+                int v = stk.back(); stk.pop_back();
+                comp[v] = ncomp;
+                if (v == u) break;
+            }
+            ncomp++;
+        }
+    }
+    bool solve() {
+        ord.assign(2 * n, 0); low.assign(2 * n, 0); comp.assign(2 * n, -1);
+        for (int i = 0; i < 2 * n; i++) if (!ord[i]) dfs(i);
+        val.assign(n, false);
+        for (int i = 0; i < n; i++) {
+            if (comp[2 * i] == comp[2 * i + 1]) return false;
+            val[i] = comp[2 * i] < comp[2 * i + 1];  // Tarjan numbers SCCs in reverse topological order
+        }
+        return true;
+    }
+};
+
+
+
+https://codeforces.com/edu/course/2/lesson/6/2/practice/contest/283932/problem/B - floating point bs
+**WTF binary serach so cringe**
+https://codeforces.com/edu/course/2/lesson/4/2/practice/contest/273278/problem/C
+**WTF segment tree so cringe**
+https://codeforces.com/contest/1872/problem/F
+**DFS cycle**
+https://codeforces.com/contest/2143/problem/D2
+**BIT + dp**
+https://codeforces.com/contest/2191/problem/D2
+**define dp states creatively+strong observation** 
+https://codeforces.com/contest/2196/problem/B
+**crazy sqrt optimization, euneumeration trick (back and forth)**
+https://codeforces.com/problemset/problem/2195/F
+**clever dp construct, finding longest path containing node i on DAG**
+**dpl: max length from start to l. dpr: max length from r to end. max of dpl+dpr-1**
+https://qoj.ac/contest/2645/problem/15314
+**skewed binary search (discard 1/3 on right) , as many 00000s then few 11s ; confident that l=m2 (jump 66%)**
+**intended : find depth + find centroids del n/3 points everytime // randomized + find d that splits ard half**
+https://leetcode.com/problems/count-good-integers-on-a-grid-path/
+**Digit DP: aware 1. >> x is divided by 2 not 10 ; 2. extract digit need / then %10**
+https://leetcode.com/submissions/detail/1986368236/
+**crazy vector to list optimization ; intended : xor staring point and ending point?**
+https://oj.wyk.edu.hk/task/C2644
+**sieve like trick to retrieve every factors in log(n) + sum-of-factors function [multiplication of: (Pi^(k+1) - 1) / (Pi - 1)]**
+**intended: sieve like approach to pre-calculate sum**
+**ADAM_XU: linear sieve + sum-of-factors**
+https://codeforces.com/contest/2232/problem/C2
+**ternary search, special handle  f(m1) is equal to f(m2)**
+**intended: binary search to find first f(x)>=f(x+1), since if f(i+1)<f(i+2), f(i)<f(i+1) [increases -> strictly decrease]**
+**intended: smart greedy, maintaning l, r, ans ; min opened seats, max opened seats, max ans**
+
+
+
+https://codeforces.com/blog/entry/47764
+**[Tutorial] Non-trivial DP Tricks and Techniques**
+https://codeforces.com/blog/entry/45223
+**SOS Dynamic Programming [Tutorial]**
+
+g++ -x c++ -O2 -std=gnu++20 -static -pipe -o "$DEST" "$@"
+
+-x c++: Forces the compiler to treat the file as C++ code, ignoring its actual file extension (like .c or .txt).-g: Generates debugging information so you can use tools like GDB to inspect your code and fix runtime errors.-static: Links all libraries statically, producing a standalone executable file that contains all necessary library code inside it.*/

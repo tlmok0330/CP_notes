@@ -1,0 +1,39 @@
+/*
+07/05/2026 : CF Div.2 : https://codeforces.com/contest/2224/
+problem C implmentation, string, obsercation
+- requires critical observation, step by step approach would be too complex
+
+13/09/2026 : LC contest 519 : https://leetcode.com/contest/weekly-contest-519
+completely cooked 1/4, upsolve needed
+problem 3 implementation
+- BIT, Sweep Line, Merge sort tree
+=======
+08/10/2026 : CF Div.3 : https://codeforces.com/contest/2275
+problem D observation
+- debug: out * 2
+- debug: lowering ci, benefits 2 pair //mathematically useless handle?
+- LONG LONG IN BINARY SEARCH l+r>>1LL
+- ACTUALLY my first time -> 1e18 is not large enough
+
+problem E observation
+- looked like a MST problem, but MST allows degree > 1 --> wouldve repeated visit
+- a node is hanging -> no vertical till end
+- off by 1 error in line 36
+
+problem F primes, number theory, hashing (UNSOLVED)
+- prefix mul -> overflow
+- bottle neck with primes checking (sieve is O(nloglogn))
+=======
+15/10/2026 : CF Div.2 : https://codeforces.com/contest/2276
+problem C map, fastlookup
+- monotonic stack - ammortized time O(1) 
+- handling L,R ranges, off by 1
+
+problem D graph, observation, constructive
+- find graph with no cycle + max diameter <= 3
+
+problem E subsequence, counting, tricks
+- nxt to store next occurence -> fast commpute
+- count good subs -> total - bad subs (observation big - small)
+- difference array on difference array
+*/
