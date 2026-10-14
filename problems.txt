@@ -129,6 +129,10 @@ https://qoj.ac/contest/1784/problem/9249 (problem H - 23/24 ICPC xian) 14.10.202
 **Model: Merge Sort Tree || Mo's Algo + BIT / Freq Arr**
 **think: sparse table like: small to large queries ;; implementation details, init etc**
 
+https://qoj.ac/contest/2562/problem/14690 (problem J - 25/26 ICPC xian) 14.10.2026
+**binary lifting with dp on tree** ** observation: need use up using all**
+**maintain global dp for opt sol -> per anc[cn][x] tune : cost when having cn in hand**
+
 https://codeforces.com/contest/2276/problem/E - 15.10.2026
 **subsequence, counting, tricks: nxt occurence arr** **easier way to count: big - small**
 **difference array on difference array ; off by 1 error**

@@ -65,7 +65,17 @@ GRAPH - TREE:
 GRAPH THEORY
 - SCC, bridge, Articulation Point
 - BCC ？？
-- BIPARTITE
+- Functional Graph - every node out-degree = 1 (directed graph)
+    - per weakly connected component = exactly 1 directed cycle (legnth 1 acceptable) + tree nodes pointing towards it
+    - reverse topological order using ind
+- BIPARTITE - iff no odd cycle
+    - Kőnig’s Thm : in biparitite: max of non-overlapping edges (maximum matching) [no two edges share a common vertex] = min of vertices needed to touch every edge (minimum vertex cover)
+    - Hopcroft-Karp Algo : O(sqrt(V)E)
+    - Bipartite game: first player wins iff the start vertex is in *every* maximum matching
+- Min-Cut-Max-Flow
+    - S-T cut 
+    - FF Algo : Residual graph traverse
+    - Dinic's Algo : 1. Build layer graph 2. Traverse possible s-t paths (pruning) 3. Update weights and Repeat 
 - TSP, go every vertex exactly once -> return to start -> NP-hard 
     - naive: dp[mask ∪ {v}][v] = min(dp[mask ∪ {v}][v], dp[mask][u] + weight(u, v))
     - 1. Hamiltonian Path (no need return to start)
@@ -126,7 +136,7 @@ C_n = 1/(n+1) * C{2n}{n}
 C_n = C{2n}{n} - C{2n}{n-1}
 C_(n+1) = sum{i=0}-{n} C_i * C_(n-i), starting with C_0 = 1
 
-Ex-GCD: O(log(min(a, b)){
+Ex-GCD: O(log(min(a, b))){
 int exgcd(int a, int b, int& x, int& y){
   if(b==0){
     x=1; y=0;
@@ -945,7 +955,28 @@ struct TwoSat {
     }
 };
 
+Cycle on functional graphs: O(N)
+vector<int> state(n, 0), onCycle(n, 0);  // 0 unvisited, 1 on current path, 2 done
+for (int s = 0; s < n; s++) {
+    if (state[s]) continue;
+    vector<int> path;
+    int u = s;
+    while (state[u] == 0) { state[u] = 1; path.push_back(u); u = nxt[u]; }
+    if (state[u] == 1)                                    // closed a new cycle at u
+        for (int i = (int)path.size() - 1; ; i--) { onCycle[path[i]] = 1; if (path[i] == u) break; }
+    for (int v : path) state[v] = 2;
+}
 
+Euler Tour -> Segtree? Subtree Test?
+void dfs(int cn, int pa, vector<vector<int> > &adj){
+  st[cn]=timer++;
+  euler.push_back(cn);
+  for(auto u: adj[cn]){
+    if(u!=pa) dfs(u, cn, adj);
+  }
+  en[cn]=timer;
+  return;
+}
 
 https://codeforces.com/edu/course/2/lesson/6/2/practice/contest/283932/problem/B - floating point bs
 **WTF binary serach so cringe**
