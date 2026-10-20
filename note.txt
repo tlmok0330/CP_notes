@@ -9,6 +9,7 @@ LEETCODE:
 - fav list wiih many hard problems and tricks
 
 GENERAL:
+- cin.tie(0)->sync_with_stdio(0)
 - 0 - 1 indexing ; off by 1 error
 - total number of subsequences of an array of size 'n' is 2^n
 - 1e18-1 != (1LL<<18)-1 ;; LLONG_MAX , INT_MAX
@@ -23,9 +24,14 @@ GENERAL:
 - multiset : ms.count(x) ; time_complexity O(logn + k), where k is no. of occurence of number x!!
 - MEX : O(n) seen bool array, global frequency array for suffix (leetcode upsolve)
 - Ternary Search : strictly unimodal (no plateaus) || Binary Search on the Derivative (derivative of unimodal is monotonic) - cf upsolve 2232
-- number of primes <= 10⁶ : 78,498 ;; number of primes <= x: π(x) ≈ x / ln x ;; P(x is prime) ≈ 1 / ln x
 - wipe out memory if multi test cases!!
 - discretization !!!!!!!!!!!!!
+
+NUMBER THEORY:
+- number of primes <= 10⁶ : 78,498 ;; number of primes <= x: π(x) ≈ x / ln x ;; P(x is prime) ≈ 1 / ln x
+- polynomial exp? A(x) = 0, exp(A(x))? ->> NTT Newton method related!!!!!
+- Gaussian elimination -> under modulo???
+
 
 BUG
 - update(0, 1, n, v[la], la++) --> CAUSES BUG
@@ -43,6 +49,8 @@ BITMASK:
 - sub-mask: for(int s=a; s>0; s=(s-1) & a) ... (1. 0 excluded to prevent infinite loop) (2. time O(3^n) for all masks and their submasks)
 - x &= (x - 1) clears the lowest set bit
 - c++20: std::countr_zero(u) : count trailing zeros from lowest significant bit ; works for unsigned only ; Lowest Set Bit =/= Significant Bit
+- std::bitset<MAXN> performs 64-bit word-level parallel OR 
+- packs boolean arrays into 64-bit integer words and leverages hardware SIMD/bitwise operations to execute array operations up to 64x faster than a standard vector<bool>
 
 BACKTRACK PATH:
 - opt array may store path leading to dead end (careful!)
@@ -65,6 +73,7 @@ GRAPH - TREE:
 GRAPH THEORY
 - SCC, bridge, Articulation Point
 - BCC ？？
+- Reachability sets for all nodes: bitset DP in reverse topo order, O(n·m/64)
 - Functional Graph - every node out-degree = 1 (directed graph)
     - per weakly connected component = exactly 1 directed cycle (legnth 1 acceptable) + tree nodes pointing towards it
     - reverse topological order using ind
@@ -73,7 +82,7 @@ GRAPH THEORY
     - Hopcroft-Karp Algo : O(sqrt(V)E)
     - Bipartite game: first player wins iff the start vertex is in *every* maximum matching
 - Min-Cut-Max-Flow
-    - S-T cut 
+    - S-T cut : A ∪ B = V ; A ∩ B = ∅ ; s ∈ A ; t ∈ B
     - FF Algo : Residual graph traverse
     - Dinic's Algo : 1. Build layer graph 2. Traverse possible s-t paths (pruning) 3. Update weights and Repeat 
 - TSP, go every vertex exactly once -> return to start -> NP-hard 
@@ -234,6 +243,26 @@ DP Subset Sum (unlimited supply of v[i]): O(n*mx)
     }
   }
 }
+
+Digit DP:
+{
+// count(N) for [0, N]; answer = count(R) - count(L - 1)
+long long memo[20][STATE][2];  // pos, state, started (leading zeros)
+long long go(int pos, int st, bool tight, bool started, const string& d) {
+    if (pos == (int)d.size()) return good(st, started);
+    if (!tight && memo[pos][st][started] != -1) return memo[pos][st][started];
+    long long r = 0;
+    int lim = tight ? d[pos] - '0' : 9;
+    for (int x = 0; x <= lim; x++) {
+        bool ns = started || x;
+        r += go(pos + 1, ns ? next_state(st, x) : st, tight && x == lim, ns, d);
+    }
+    if (!tight) memo[pos][st][started] = r;
+    return r;
+    //reset memo per N??
+}
+}
+
 
 LIS: O(n*log(n))
 {
@@ -911,7 +940,11 @@ Two-Satisfiability template:
   3. Force x2 to be False
   solver.force(2, false);
 - O(N+M) 
-
+a or b	    (a ∨ b)
+not both	  (¬a ∨ ¬b)
+a implies b	(¬a ∨ b)
+exactly one	(a ∨ b), (¬a ∨ ¬b)
+a == b	    (¬a ∨ b), (a ∨ ¬b)
 struct TwoSat {
     
     int n, timer = 0, ncomp = 0;
@@ -976,6 +1009,249 @@ void dfs(int cn, int pa, vector<vector<int> > &adj){
   }
   en[cn]=timer;
   return;
+}
+
+Dinic's Algorithm
+General Capacities: O(V^2 E) 
+Unit Capacity Networks c = 1: O(E sqrt{V}) - Applies to Bipartite Matching graphs
+struct Dinic {
+    struct E { int to; long long cap; };
+    vector<E> e;
+    vector<vector<int>> g;
+    vector<int> level, it;
+    Dinic(int n) : g(n), level(n), it(n) {}
+    void add(int u, int v, long long c) {
+        g[u].push_back(e.size()); e.push_back({v, c});
+        g[v].push_back(e.size()); e.push_back({u, 0});
+    }
+    bool bfs(int s, int t) {
+        fill(level.begin(), level.end(), -1);
+        queue<int> q; q.push(s); level[s] = 0;
+        while (!q.empty()) {
+            int u = q.front(); q.pop();
+            for (int id : g[u]) if (e[id].cap > 0 && level[e[id].to] < 0)
+                level[e[id].to] = level[u] + 1, q.push(e[id].to);
+        }
+        return level[t] >= 0;
+    }
+    long long dfs(int u, int t, long long f) {
+        if (u == t) return f;
+        for (int& i = it[u]; i < (int)g[u].size(); i++) {
+            int id = g[u][i], v = e[id].to;
+            if (e[id].cap > 0 && level[v] == level[u] + 1) {
+                long long d = dfs(v, t, min(f, e[id].cap));
+                if (d > 0) { e[id].cap -= d; e[id ^ 1].cap += d; return d; }
+            }
+        }
+        return 0;
+    }
+    long long maxflow(int s, int t) {
+        long long flow = 0;
+        while (bfs(s, t)) {
+            fill(it.begin(), it.end(), 0);
+            while (long long f = dfs(s, t, LLONG_MAX)) flow += f;
+        }
+        return flow;
+    }
+};
+EXAMPLE USAGE:
+int main() {
+    int n = 4;
+    int s = 0, t = 3; // Source = 0, Sink = 3
+    Dinic dinic(n);
+
+    // Add edges: dinic.add(u, v, capacity) - Undirected - add twice 
+    dinic.add(0, 1, 10); // Edge index 0 (rev: 1)
+    dinic.add(0, 2, 5);  // Edge index 2 (rev: 3)
+    dinic.add(1, 2, 15); // Edge index 4 (rev: 5)
+    dinic.add(1, 3, 10); // Edge index 6 (rev: 7)
+    dinic.add(2, 3, 10); // Edge index 8 (rev: 9)
+
+    // 1. Calculate Maximum Flow
+    long long flow = dinic.maxflow(s, t);
+    cout << "Maximum Flow: " << flow << "\n\n";
+
+    // 2. Inspect Flow on Each Original Edge
+    // Forward edges are stored at even indices (0, 2, 4, 6, ...)
+
+    cout << "--- Edge Flows ---\n";
+    for (int id = 0; id < (int)dinic.e.size(); id += 2) {
+        int u = dinic.e[id ^ 1].to; // Source of directed edge
+        int v = dinic.e[id].to;     // Target of directed edge
+        
+        long long pushed_flow = dinic.e[id ^ 1].cap; // Flow sent is stored in reverse capacity
+        long long original_cap = dinic.e[id].cap + dinic.e[id ^ 1].cap;
+
+        cout << u << " -> " << v << " | Flow: " << pushed_flow << " / " << original_cap << "\n";
+    }
+
+    // 3. Extract Minimum S-T Cut
+    // The last bfs(s, t) inside maxflow leaves reachable nodes marked in dinic.level
+
+    cout << "\n--- Minimum Cut Edges ---\n";
+    for (int u = 0; u < n; u++) {
+        if (dinic.level[u] != -1) { // Node u belongs to Set S
+            for (int id : dinic.g[u]) {
+                if (id % 2 == 0) { // Consider only original forward edges
+                    int v = dinic.e[id].to;
+                    if (dinic.level[v] == -1) { // Node v belongs to Set T
+                        cout << "Cut Edge: " << u << " -> " << v << "\n";
+                    }
+                }
+            }
+        }
+    }
+    return 0;
+}
+
+Bitset Usage:
+{
+1. Element Access & Modification
+
+Method	            Description	                                            Time	  Example / Usage
+operator[](pos)	    Unchecked bit access (returns proxy reference or bool).	O(1)	  bs[3] = 1; or bool b = bs[3];
+test(pos)       	  Bounds-checked bit access. Throws out_of_range.	        O(1)	  if (bs.test(3)) { ... }
+set()	              Sets all bits to 1.	                                    O(N/64)	bs.set();
+set(pos, val=true)	Sets bit at pos to val (0 or 1).	                      O(1)	  bs.set(3, 0);
+reset()	            Resets all bits to 0.	                                  O(N/64)	bs.reset();
+reset(pos)	        Resets bit at pos to 0.	                                O(1)	  bs.reset(3);
+flip()	            Toggles (flips) all bits.	                              O(N/64)	bs.flip();
+flip(pos)	          Toggles bit at pos.	                                    O(1)	  bs.flip(3);
+
+2. Capacity & Inspection
+Method	Description	Time	Example / Usage
+size()	 Returns the fixed capacity N.	        O(1)	  size_t n = bs.size();
+count()	Returns the total number of 1 bits.   	O(N/64)	int ones = bs.count();
+any()	  Returns true if at least one bit is 1.	O(N/64)	if (bs.any()) { ... }
+none()	Returns true if no bits are 1.	        O(N/64)	if (bs.none()) { ... }
+all()	  Returns true if all bits are 1.	        O(N/64)	if (bs.all()) { ... }
+
+3. changing values: bitset<1000> b(4); b = biset<1000>(20);
+}
+
+SOS DP O(k 2^k)
+uses on max min as well
+{
+for (int b = 0; b < k; b++)
+    for (int m = 0; m < (1 << k); m++)
+        if ( (m >> b) & 1) f[m] += f[m ^ (1 << b)];
+// now f[m] = Σ over submasks s of m of original f[s]
+
+// f(m) <- in place array, [b][_] depends on [b-1][_]
+
+// Superset sums: same loop with f[m ^ (1 << b)] += f[m] when bit b is set (or iterate masks without bit b). or
+for (int b = 0; b < k; b++)
+    for (int m = (1 << k) - 1; m >= 0; m--)
+        if (!((m >> b) & 1)) f[m] += f[m | (1 << b)];
+
+/*
+Example: Given an array A of N integers (Aᵢ < 2ᵏ), find the number of pairs (i, j) such that Aᵢ & Aⱼ = 0.
+We have: Aᵢ & Aⱼ = 0 ⟺ Aⱼ ⊆ ~Aᵢ
+where ~Aᵢ = ((2ᵏ - 1) ⊕ Aᵢ) is the bitwise NOT of Aᵢ within k bits.
+Thus, for each element x ∈ A, the number of valid partners y ∈ A equals the number of elements in A whose mask is a submask of ~x.
+Sol: Run SOS DP on frequencies || for (int x : A) freq[x]++; vector<long long> f = freq;
+
+// further readings: and or gcd lcm 
+}
+
+Discretization template O(nlogn):
+{
+// 傳入原始陣列，回傳對應的離散化後陣列
+std::vector<int> discretize(const std::vector<int>& A) {
+    std::vector<int> vals = A; // 複製一份用來做映射表
+    
+    // 1. 排序與去重
+    std::sort(vals.begin(), vals.end());
+    vals.erase(std::unique(vals.begin(), vals.end()), vals.end());
+    
+    // 2. 映射回原陣列
+    std::vector<int> compressed;
+    compressed.reserve(A.size());
+    for (int x : A) {
+        // lower_bound 回傳迭代器，相減得到從 0 開始的連續索引 (0, 1, 2...)
+        int id = std::lower_bound(vals.begin(), vals.end(), x) - vals.begin();
+        compressed.push_back(id);
+    }
+    return compressed;
+}
+// Dealing Ranges -> preserve the characteristic of discontinued / continued ranges - insert vals
+}
+
+SCC:
+{
+  vector<vector<int> > adj(2e5+2);
+  vector<int> dfn(2e5+2), low(2e5+2, 0);
+  int tot=1;
+  vector<bool> in_stack(2e5+2);
+  vector<int> st;
+  vector<int> scc(2e5+2), emp;
+  vector<vector<int> > grp(1e5+2);
+  int gp=0;
+
+  void SCC(int cn){
+    dfn[cn]=low[cn]=tot++;
+    st.pb(cn); in_stack[cn]=1;
+    for(int v: adj[cn]){
+      if(!dfn[v]){
+        SCC(v);
+        low[cn]=min(low[cn], low[v]);
+      }
+      else if(in_stack[v]){
+        low[cn]=min(low[cn], low[v]);
+      }
+    }
+    if(dfn[cn]==low[cn]){
+      while(true){
+        int t=st.back();
+        st.pop_back();
+        scc[t]=gp;
+        grp[gp].pb(t);
+        in_stack[t]=0;
+        if(t==cn) break;
+      }
+      gp++;
+    }
+    return;
+  }
+  **int main(){**
+    for(int i=1; i<=n; i++)
+      if(!dfn[i]) SCC(i);
+  }
+}
+
+Bridge: {
+void tarjan(int cn, int pa){
+  st[cn]=low[cn]=++cnt;
+  for(auto [to, id]: adj[cn]){
+    if(!st[to]){
+      tarjan(to, cn);
+      low[cn]=min(low[to], low[cn]);
+      if(low[to]>st[cn]) bridge.pb(id);
+    }
+    else if(to!=pa) {
+      low[cn]=min(low[cn], st[to]);
+    }
+  }
+}
+}
+
+Articulation Point: {
+void tarjan(int cn, int pa){
+  st[cn]=low[cn]=++cnt;
+  int child_cnt=0;
+  for(auto [to, id]: adj[cn]){
+    if(!st[to]){
+      tarjan(to, cn);
+      child_cnt++;
+      low[cn]=min(low[to], low[cn]);
+      if(low[to]>=st[cn] && pa!=-1 && !ap[cn]) {ap[cn]=1; ans++;}
+    }
+    else if(to!=pa) {
+      low[cn]=min(low[cn], st[to]);
+    }
+  }
+  if(pa==-1 && child_cnt>1) {ap[cn]=1; ans++;}
+}
 }
 
 https://codeforces.com/edu/course/2/lesson/6/2/practice/contest/283932/problem/B - floating point bs

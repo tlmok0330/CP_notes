@@ -132,8 +132,38 @@ https://qoj.ac/contest/1784/problem/9249 (problem H - 23/24 ICPC xian) 14.10.202
 https://qoj.ac/contest/2562/problem/14690 (problem J - 25/26 ICPC xian) 14.10.2026
 **binary lifting with dp on tree** ** observation: need use up using all**
 **maintain global dp for opt sol -> per anc[cn][x] tune : cost when having cn in hand**
+**intended: root-path prefix: goes to root -> then x,y**
 
 https://codeforces.com/contest/2276/problem/E - 15.10.2026
 **subsequence, counting, tricks: nxt occurence arr** **easier way to count: big - small**
 **difference array on difference array ; off by 1 error**
+
+Interative problem: In a binary array, ask L,R ; return (sum of a[i] OR (R-L+1)), output exact config or "many", in N asks
+**think in a smaller way, using L,L+1 ask** **many nuance 打表 handling?** **string and its complement**
+**math proves: if an even size interval contains odd number of ones -> a size 4 interval contains odd number of ones** 
+**contrapositive: if for every size 4 interval in the larger interval has even number of ones -> it has even number of ones in total**
+
+
+
+Linerar basis on tree path xor?
+
+imagined holly
+pairwise information on a tree, try triples 
+ xor of three answers gives "center" of 3 nodes 
+
+ (problem I - 25/26 ICPC shanghai) 
+**multi segments = random pick => dp[i] n^2 find all**
+**optimize n^2 dp, sqrt(val-range)** 
+**edge cases should be captured by state definition, not hard-coded？** **last kept index k -> ans = min(f_k + (n-k) * C)**
+**0-1 Trie optimization for stating C*(i-1) does not depend on j**
+
+
+K - MEX
+**cin.tie ;; use .find for one time query** **use umap id[v[i]]=label++;**
+**using distinct vals U<=n optimize**
+
+kodi - difference array thing / spicy ramen 
+-> answers appearing on endpoint?
+
+problem
 */

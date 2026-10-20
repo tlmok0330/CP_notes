@@ -36,4 +36,18 @@ problem E subsequence, counting, tricks
 - nxt to store next occurence -> fast commpute
 - count good subs -> total - bad subs (observation big - small)
 - difference array on difference array
+=======
+18/10/2026 : ICPC Xi'an 2026 : disaster
+打表, rand//brut
+better way to know the algo / hypothesis correct?
+problem M simulation
+- submitted a wrong version code -> poor directary handling during contest
+- "-g -fsanitize=address,undefined" ;; USAGE of debugger
+problem j adhoc, constructive
+- spent 3 hours into observing properties: odd even linkage? dsu? greedy?
+problem C dp
+- a lot of ACs, thought it wont be dp (cuz not obvious?) -> underestimated -> dp variation
+problem H adhoc, map, sweepline (2 hr)
+- monotonic + grouping "saving" observation
+- think of adding 1 more M -> save how many P
 */
