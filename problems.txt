@@ -123,7 +123,8 @@ https://qoj.ac/contest/2908/problem/15323 (problem J - 25/26 ICPC shanghai)
 
 https://oj.wyk.edu.hk/task/W262E - 13.10.2026
 **interesting XOR: offline + bounded O(n) queries observation**
-**1. Mo's algorithm (better use set{missing}); 2. MEX segtree (Ts Te on val domain) ; 3. prefix max update**  
+**1. Mo's algorithm (risk n^2 OR use freq+set{missing}); 2. MEX segtree (Ts Te on val domain) ; 3. prefix max update**  
+**4. O(n) sweep line using last_seen arr : 一個區間不能包含 \(x\)，意味著我們只要在每次看到 \(x\) 時，檢查 \(x\) 上一次出現位置到當前位置之間的這段區間，其內所有小於 \(x\) 的數是否都出現過** 
 
 https://qoj.ac/contest/1784/problem/9249 (problem H - 23/24 ICPC xian) 14.10.2026
 **Model: Merge Sort Tree || Mo's Algo + BIT / Freq Arr**
@@ -165,5 +166,4 @@ K - MEX
 kodi - difference array thing / spicy ramen 
 -> answers appearing on endpoint?
 
-problem
 */

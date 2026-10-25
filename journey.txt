@@ -49,5 +49,5 @@ problem C dp
 - a lot of ACs, thought it wont be dp (cuz not obvious?) -> underestimated -> dp variation
 problem H adhoc, map, sweepline (2 hr)
 - monotonic + grouping "saving" observation
-- think of adding 1 more M -> save how many P
+- think of adding 1 more M -> save how many P ;; in sweep line sense, only turning points can be critical points
 */
