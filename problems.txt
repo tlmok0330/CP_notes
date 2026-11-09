@@ -131,7 +131,7 @@ https://qoj.ac/contest/1784/problem/9249 (problem H - 23/24 ICPC xian) 14.10.202
 **think: sparse table like: small to large queries ;; implementation details, init etc**
 
 https://qoj.ac/contest/2562/problem/14690 (problem J - 25/26 ICPC xian) 14.10.2026
-**binary lifting with dp on tree** ** observation: need use up using all**
+**binary lifting with dp on tree** ** observation: need goes up using all**
 **maintain global dp for opt sol -> per anc[cn][x] tune : cost when having cn in hand**
 **intended: root-path prefix: goes to root -> then x,y**
 
@@ -146,7 +146,7 @@ Interative problem: In a binary array, ask L,R ; return (sum of a[i] OR (R-L+1))
 
 
 
-Linerar basis on tree path xor?
+Linerar basis on tree path xor? codeforces
 
 imagined holly
 pairwise information on a tree, try triples 
@@ -156,7 +156,11 @@ pairwise information on a tree, try triples
 **multi segments = random pick => dp[i] n^2 find all**
 **optimize n^2 dp, sqrt(val-range)** 
 **edge cases should be captured by state definition, not hard-coded？** **last kept index k -> ans = min(f_k + (n-k) * C)**
-**0-1 Trie optimization for stating C*(i-1) does not depend on j**
+**0-1 Trie optimization while showing C*(i-1) does not depend on j**
+
+ (problem B - 25/26 ICPC shanghai) 
+**split case (bipartite? general? tree? chain?) handling** **construction: think of MST when traversing a (dense) graph**
+**odd cycle means sth**
 
 
 K - MEX

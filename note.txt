@@ -24,7 +24,9 @@ GENERAL:
 - multiset : ms.count(x) ; time_complexity O(logn + k), where k is no. of occurence of number x!!
 - MEX : O(n) seen bool array, global frequency array for suffix (leetcode upsolve)
 - Ternary Search : strictly unimodal (no plateaus) || Binary Search on the Derivative (derivative of unimodal is monotonic) - cf upsolve 2232
-- wipe out memory if multi test cases!!
+- wipe out memory if multi test cases
+- a next occurence array is somtimes useful
+- IF involve vertor sorting, do not ever create larger buffer => flawed preceeding zeros
 - discretization !!!!!!!!!!!!!
 
 NUMBER THEORY:
@@ -80,6 +82,8 @@ GRAPH THEORY
 - BIPARTITE - iff no odd cycle
     - Kőnig’s Thm : in biparitite: max of non-overlapping edges (maximum matching) [no two edges share a common vertex] = min of vertices needed to touch every edge (minimum vertex cover)
     - Hopcroft-Karp Algo : O(sqrt(V)E)
+    - complement of MVC = Maximum Independent Set (vertices) [no two nodes share a common edge]
+    - given max matching edges -> start at all unmatched L nodes, L->R use non match E ; R->L use match E ;; unvisited L + visited R nodes form MVC
     - Bipartite game: first player wins iff the start vertex is in *every* maximum matching
 - Min-Cut-Max-Flow
     - S-T cut : A ∪ B = V ; A ∩ B = ∅ ; s ∈ A ; t ∈ B

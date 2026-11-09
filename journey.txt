@@ -47,7 +47,61 @@ problem j adhoc, constructive
 - spent 3 hours into observing properties: odd even linkage? dsu? greedy?
 problem C dp
 - a lot of ACs, thought it wont be dp (cuz not obvious?) -> underestimated -> dp variation
+- crazy understanding of dijkstra on dp -> layered dp ; analyzing dp transition
 problem H adhoc, map, sweepline (2 hr)
 - monotonic + grouping "saving" observation
 - think of adding 1 more M -> save how many P ;; in sweep line sense, only turning points can be critical points
+=======
+27/10/2026 : CF Div.2 : https://codeforces.com/contest/2272
+problem B observation, adhoc
+- grps of 2 columns, was thinking to elminate Prefix
+- observing constraints - found countinf [o,f] pairs more critical
+problem C binary serach, dp construct
+- quick bin search vibe 
+- immense observation to optimal strat and dp construction
+problem D bipartite tree
+- learning 
+=======
+30/10/2026 : ICPC Wuhan 2025 : fahh
+Sol. shld be TRIVIAL TO EXPLAIN, GOES WITH RIGORIOUS IDEAS
+problem F greedy, simple math
+- failed to solve quick, log math fked
+problem E ad hoc
+- observation bases, contruct operator
+problem H interactive XOR
+- small case brute force, assumptions wrong again
+- intended: find mn mx, then recursive to subtree find mx mn there -> find all
+- offical: equivalent to 01 Trie -> asking if a trie leaf node is an entry
+problem M constructive
+- mathy
+problem K constructive
+- min cost sequence of swaps
+- observe each swaps doesnt have to be 1-diff : but make sure a swap is along with optimal bound
+probelm A modulo arithmtic?
+- modular inverse approach does NOT work : 
+- 1. Modular Inverse Destroys Inequality Order, consider 2t mod 5 < 3 mod 5 ;; t=2 no, t=3 yes
+- 2. Difference of Modulos NOT EQ Modulo of Difference, (ft + x) mod m - (gt + y) mod m .VS. ((f - g)t + (x - y) ) mod m
+- intended : floor division sums + Like-Euclidean Algorithm (summation t of: floor((at+b)/c))
+- boolean condition to floor identity: [u < v] {bool true or false} = 1 + ⌊ (v - 1 - u) / m ⌋ ; u, v ∈ [0, m - 1]  (Both u and v are integers modulo m)
+problem B 2-SAT, graph constructive
+- modelling to 2-SAT
+- graph with dfs n^2 ; graph with segt (depth with dfs order) ; graph with partitioning
+=======
+31/10/2026 : ICPC Wuhan 2026 heat
+problem D constructive
+- thought process ok -> too slow too unattentive 
+- model as some operator
+=======
+31/10/2026 : ICPC Wuhan 2026 
+problem D dfs, tree
+problem K dag, combinatorics, forest
+problem G binary search
+problem J construction, mex, ad hoc
+- sense of sorting something, handling things greedily might be better
+- test cases of n=3 n=4 n=5 more thinking needed
+- 1 n constraint 1 slot -> recurively goes down ;; wildcard to the right ;; wildcard with dump operation
+- goes from lemma to sth else, clearly state findings
+- error-free needed
+
+and range XOR lin base q from some contest?
 */
