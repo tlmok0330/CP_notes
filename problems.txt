@@ -1,9 +1,9 @@
 /*
 https://codeforces.com/edu/course/2/lesson/6/2/practice/contest/283932/problem/B - floating point bs
-**WTF binary serach so cringe**
+**!!! binary serach so cringe**
 
 https://codeforces.com/edu/course/2/lesson/4/2/practice/contest/273278/problem/C
-**WTF segment tree so cringe**
+**!!! segment tree so cringe**
 
 https://codeforces.com/contest/1872/problem/F
 **DFS cycle**
@@ -131,7 +131,7 @@ https://qoj.ac/contest/1784/problem/9249 (problem H - 23/24 ICPC xian) 14.10.202
 **think: sparse table like: small to large queries ;; implementation details, init etc**
 
 https://qoj.ac/contest/2562/problem/14690 (problem J - 25/26 ICPC xian) 14.10.2026
-**binary lifting with dp on tree** ** observation: need goes up using all**
+** lifting with dp on tree** ** observation: need goes up using all**
 **maintain global dp for opt sol -> per anc[cn][x] tune : cost when having cn in hand**
 **intended: root-path prefix: goes to root -> then x,y**
 
