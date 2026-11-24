@@ -1259,9 +1259,9 @@ void tarjan(int cn, int pa){
 }
 
 https://codeforces.com/edu/course/2/lesson/6/2/practice/contest/283932/problem/B - floating point bs
-**WTF binary serach so cringe**
+**!!! binary serach so cringe**
 https://codeforces.com/edu/course/2/lesson/4/2/practice/contest/273278/problem/C
-**WTF segment tree so cringe**
+**!!! segment tree so cringe**
 https://codeforces.com/contest/1872/problem/F
 **DFS cycle**
 https://codeforces.com/contest/2143/problem/D2
